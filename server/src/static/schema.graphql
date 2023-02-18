@@ -1,10 +1,18 @@
-type Staff {
+type Employee {
     id: ID!
-    name: String!
-    age: Int!
-    department: String!
+    first_name: String!
+    last_name: String!
+    hire_date: String!
+    birth_date: String!
+    department: Department
+}
+
+type Department {
+    id: ID!
+    dept_name: String!
 }
 
 type Query {
-    allStaffs: [Staff!]!
+    allEmployees(limit: Int, offset: Int): [Employee!]!
+    employeesByDepartment(department: String!, limit: Int, offset: Int): [Employee!]!
 }

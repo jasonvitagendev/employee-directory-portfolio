@@ -4,6 +4,7 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -13,17 +14,39 @@ export type Scalars = {
   Float: number;
 };
 
-export type Query = {
-  __typename?: 'Query';
-  allStaffs: Array<Staff>;
+export type Department = {
+  __typename?: 'Department';
+  dept_name: Scalars['String'];
+  id: Scalars['ID'];
 };
 
-export type Staff = {
-  __typename?: 'Staff';
-  age: Scalars['Int'];
-  department: Scalars['String'];
+export type Employee = {
+  __typename?: 'Employee';
+  birth_date: Scalars['String'];
+  department?: Maybe<Department>;
+  first_name: Scalars['String'];
+  hire_date: Scalars['String'];
   id: Scalars['ID'];
-  name: Scalars['String'];
+  last_name: Scalars['String'];
+};
+
+export type Query = {
+  __typename?: 'Query';
+  allEmployees: Array<Employee>;
+  employeesByDepartment: Array<Employee>;
+};
+
+
+export type QueryAllEmployeesArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type QueryEmployeesByDepartmentArgs = {
+  department: Scalars['String'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -96,37 +119,49 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  Department: ResolverTypeWrapper<Department>;
+  Employee: ResolverTypeWrapper<Employee>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Query: ResolverTypeWrapper<{}>;
-  Staff: ResolverTypeWrapper<Staff>;
   String: ResolverTypeWrapper<Scalars['String']>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
+  Department: Department;
+  Employee: Employee;
   ID: Scalars['ID'];
   Int: Scalars['Int'];
   Query: {};
-  Staff: Staff;
   String: Scalars['String'];
 };
 
-export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  allStaffs?: Resolver<Array<ResolversTypes['Staff']>, ParentType, ContextType>;
-};
-
-export type StaffResolvers<ContextType = any, ParentType extends ResolversParentTypes['Staff'] = ResolversParentTypes['Staff']> = {
-  age?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  department?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+export type DepartmentResolvers<ContextType = any, ParentType extends ResolversParentTypes['Department'] = ResolversParentTypes['Department']> = {
+  dept_name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type EmployeeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Employee'] = ResolversParentTypes['Employee']> = {
+  birth_date?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  department?: Resolver<Maybe<ResolversTypes['Department']>, ParentType, ContextType>;
+  first_name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  hire_date?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  last_name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  allEmployees?: Resolver<Array<ResolversTypes['Employee']>, ParentType, ContextType, Partial<QueryAllEmployeesArgs>>;
+  employeesByDepartment?: Resolver<Array<ResolversTypes['Employee']>, ParentType, ContextType, RequireFields<QueryEmployeesByDepartmentArgs, 'department'>>;
+};
+
 export type Resolvers<ContextType = any> = {
+  Department?: DepartmentResolvers<ContextType>;
+  Employee?: EmployeeResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
-  Staff?: StaffResolvers<ContextType>;
 };
 
