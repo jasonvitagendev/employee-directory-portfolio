@@ -1,10 +1,13 @@
 {
   "scripts": {
-    "start": "webpack serve --env mode=development",
+    "start": "concurrently 'webpack serve --env mode=development' 'npm run generate'",
     "build": "webpack --env mode=production",
-    "serve": "npm run build && npx http-server -c-1 ./dist"
+    "serve": "npm run build && npx http-server -c-1 ./dist",
+    "generate": "graphql-codegen --config src/generated/codegen.ts --watch"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^3.0.0",
+    "@graphql-codegen/client-preset": "^2.0.0",
     "@types/node": "^18.14.0",
     "@types/react-dom": "^18.0.11",
     "@types/webpack": "^5.28.0",
@@ -22,6 +25,8 @@
     "webpack-dev-server": "^4.11.1"
   },
   "dependencies": {
+    "@apollo/client": "^3.7.8",
+    "graphql": "^16.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }
