@@ -1,8 +1,9 @@
 import List from "./List";
+import styles from "./style.module.sass";
 
 const Home = () => {
     return (
-        <div>
+        <div className={styles.bg}>
             <header></header>
             <List></List>
             <footer></footer>

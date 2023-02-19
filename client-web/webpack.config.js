@@ -1,5 +1,6 @@
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = (env) => {
     return {
@@ -13,6 +14,24 @@ module.exports = (env) => {
                     test: /.ts|x$/,
                     loader: "ts-loader",
                 },
+                {
+                    test: /.(c|sa)ss$/,
+                    use: [
+                        MiniCssExtractPlugin.loader,
+                        {
+                            loader: "css-loader",
+                        },
+                        {
+                            loader: "postcss-loader",
+                            options: {
+                                postcssOptions: {
+                                    plugins: [["autoprefixer", {}]],
+                                },
+                            },
+                        },
+                        "sass-loader",
+                    ],
+                },
             ],
         },
         resolve: {
@@ -20,6 +39,7 @@ module.exports = (env) => {
             plugins: [new TsconfigPathsPlugin()],
         },
         plugins: [
+            new MiniCssExtractPlugin(),
             new HTMLWebpackPlugin({
                 template: "./src/templates/index.html",
             }),
