@@ -4,7 +4,7 @@ type Employee {
     last_name: String!
     hire_date: String!
     birth_date: String!
-    department: Department
+    department: Department!
 }
 
 type Department {

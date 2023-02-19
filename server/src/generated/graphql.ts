@@ -23,7 +23,7 @@ export type Department = {
 export type Employee = {
   __typename?: 'Employee';
   birth_date: Scalars['String'];
-  department?: Maybe<Department>;
+  department: Department;
   first_name: Scalars['String'];
   hire_date: Scalars['String'];
   id: Scalars['ID'];
@@ -146,7 +146,7 @@ export type DepartmentResolvers<ContextType = any, ParentType extends ResolversP
 
 export type EmployeeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Employee'] = ResolversParentTypes['Employee']> = {
   birth_date?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  department?: Resolver<Maybe<ResolversTypes['Department']>, ParentType, ContextType>;
+  department?: Resolver<ResolversTypes['Department'], ParentType, ContextType>;
   first_name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   hire_date?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
