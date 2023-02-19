@@ -24,5 +24,6 @@ module.exports = (env) => {
                 template: "./src/templates/index.html",
             }),
         ],
+        devtool: env.mode === "development" ? "eval-source-map" : false,
     };
 };
