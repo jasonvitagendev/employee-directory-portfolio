@@ -1,1 +1,1 @@
-export interface CustomContext {}
+export type CustomContext = object;
