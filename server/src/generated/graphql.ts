@@ -30,10 +30,18 @@ export type Employee = {
   last_name: Scalars['String'];
 };
 
+export type EmployeeSearchResult = {
+  __typename?: 'EmployeeSearchResult';
+  full_name: Scalars['String'];
+  highlight: Array<Scalars['String']>;
+  id: Scalars['ID'];
+};
+
 export type Query = {
   __typename?: 'Query';
   allEmployees: Array<Employee>;
   employeesByDepartment: Array<Employee>;
+  searchEmployeeByFullName: Array<EmployeeSearchResult>;
 };
 
 
@@ -47,6 +55,12 @@ export type QueryEmployeesByDepartmentArgs = {
   department: Scalars['String'];
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type QuerySearchEmployeeByFullNameArgs = {
+  full_name?: InputMaybe<Scalars['String']>;
+  limit?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -121,6 +135,7 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Department: ResolverTypeWrapper<Department>;
   Employee: ResolverTypeWrapper<Employee>;
+  EmployeeSearchResult: ResolverTypeWrapper<EmployeeSearchResult>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Query: ResolverTypeWrapper<{}>;
@@ -132,6 +147,7 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
   Department: Department;
   Employee: Employee;
+  EmployeeSearchResult: EmployeeSearchResult;
   ID: Scalars['ID'];
   Int: Scalars['Int'];
   Query: {};
@@ -154,14 +170,23 @@ export type EmployeeResolvers<ContextType = any, ParentType extends ResolversPar
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type EmployeeSearchResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['EmployeeSearchResult'] = ResolversParentTypes['EmployeeSearchResult']> = {
+  full_name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  highlight?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   allEmployees?: Resolver<Array<ResolversTypes['Employee']>, ParentType, ContextType, Partial<QueryAllEmployeesArgs>>;
   employeesByDepartment?: Resolver<Array<ResolversTypes['Employee']>, ParentType, ContextType, RequireFields<QueryEmployeesByDepartmentArgs, 'department'>>;
+  searchEmployeeByFullName?: Resolver<Array<ResolversTypes['EmployeeSearchResult']>, ParentType, ContextType, Partial<QuerySearchEmployeeByFullNameArgs>>;
 };
 
 export type Resolvers<ContextType = any> = {
   Department?: DepartmentResolvers<ContextType>;
   Employee?: EmployeeResolvers<ContextType>;
+  EmployeeSearchResult?: EmployeeSearchResultResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
 };
 

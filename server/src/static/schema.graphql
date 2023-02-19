@@ -12,7 +12,14 @@ type Department {
     dept_name: String!
 }
 
+type EmployeeSearchResult {
+    id: ID!
+    full_name: String!
+    highlight: [String!]!
+}
+
 type Query {
     allEmployees(limit: Int, offset: Int): [Employee!]!
     employeesByDepartment(department: String!, limit: Int, offset: Int): [Employee!]!
+    searchEmployeeByFullName(full_name: String, limit: Int):[EmployeeSearchResult!]!
 }
