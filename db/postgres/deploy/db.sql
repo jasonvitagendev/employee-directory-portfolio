@@ -10,6 +10,11 @@ grant usage
 on schema "employees"
 to jason;
 
+grant all privileges
+on all tables
+in schema "employees"
+to jason;
+
 -- using sample database
 -- https://github.com/h8/employees-database
 
