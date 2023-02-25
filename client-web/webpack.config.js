@@ -1,12 +1,18 @@
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const path = require("node:path");
 
 module.exports = (env) => {
     return {
         mode: env.mode,
         entry: {
             main: "./src/index.tsx",
+        },
+        output: {
+            clean: true,
+            filename: "[name].[contenthash].js",
+            path: path.resolve(__dirname, "dist"),
         },
         module: {
             rules: [
