@@ -12,7 +12,10 @@ const Home = () => {
         startPageNo: 0,
     });
 
-    const [search, {data: searchResult}] = useEmployeesSearch();
+    const [
+        search,
+        {data: searchResult, loading: searchResultLoading, searchKeyword},
+    ] = useEmployeesSearch();
 
     return (
         <div className={styles.bg}>
@@ -20,6 +23,11 @@ const Home = () => {
             <SearchBox search={search} />
             <SearchResult
                 list={searchResult?.searchEmployeeByFullName || []}
+                isNoResult={
+                    !searchResultLoading &&
+                    !!searchKeyword.length &&
+                    !searchResult?.searchEmployeeByFullName.length
+                }
             ></SearchResult>
             <List
                 list={data?.allEmployees || []}
