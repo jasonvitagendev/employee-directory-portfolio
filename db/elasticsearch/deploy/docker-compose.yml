@@ -64,8 +64,8 @@ services:
     environment:
       - node.name=es01
       - cluster.name=${CLUSTER_NAME}
-      - cluster.initial_master_nodes=es01,es02,es03
-      - discovery.seed_hosts=es02,es03
+      - cluster.initial_master_nodes=es01,es02
+      - discovery.seed_hosts=es02
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
       - bootstrap.memory_lock=true
       - xpack.security.enabled=true
@@ -106,8 +106,8 @@ services:
     environment:
       - node.name=es02
       - cluster.name=${CLUSTER_NAME}
-      - cluster.initial_master_nodes=es01,es02,es03
-      - discovery.seed_hosts=es01,es03
+      - cluster.initial_master_nodes=es01,es02
+      - discovery.seed_hosts=es01
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
       - bootstrap.memory_lock=true
       - xpack.security.enabled=true
@@ -135,55 +135,11 @@ services:
       interval: 10s
       timeout: 10s
       retries: 120
-  es03:
-    depends_on:
-      - es02
-    image: elasticsearch:${STACK_VERSION}
-    container_name: portfolio_es_node_03
-    volumes:
-      - certs:/usr/share/elasticsearch/config/certs
-      - esdata03:/usr/share/elasticsearch/data
-    networks:
-      - elasticsearch
-    environment:
-      - node.name=es03
-      - cluster.name=${CLUSTER_NAME}
-      - cluster.initial_master_nodes=es01,es02,es03
-      - discovery.seed_hosts=es01,es02
-      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-      - bootstrap.memory_lock=true
-      - xpack.security.enabled=true
-      - xpack.security.http.ssl.enabled=true
-      - xpack.security.http.ssl.key=certs/es03/es03.key
-      - xpack.security.http.ssl.certificate=certs/es03/es03.crt
-      - xpack.security.http.ssl.certificate_authorities=certs/ca/ca.crt
-      - xpack.security.http.ssl.verification_mode=certificate
-      - xpack.security.transport.ssl.enabled=true
-      - xpack.security.transport.ssl.key=certs/es03/es03.key
-      - xpack.security.transport.ssl.certificate=certs/es03/es03.crt
-      - xpack.security.transport.ssl.certificate_authorities=certs/ca/ca.crt
-      - xpack.security.transport.ssl.verification_mode=certificate
-      - xpack.license.self_generated.type=${LICENSE}
-      - 'ES_JAVA_OPTS=-Xms750m -Xmx750m'
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    healthcheck:
-      test: [
-        "CMD-SHELL",
-        "curl -s --cacert config/certs/ca/ca.crt https://localhost:9200 | grep -q 'missing authentication credentials'"
-      ]
-      interval: 10s
-      timeout: 10s
-      retries: 120
   kibana:
     depends_on:
       es01:
         condition: service_healthy
       es02:
-        condition: service_healthy
-      es03:
         condition: service_healthy
     image: kibana:${STACK_VERSION}
     volumes:
@@ -207,25 +163,25 @@ services:
       interval: 10s
       timeout: 10s
       retries: 120
-#  logstash:
-#    image: logstash:8.6.1
-#    container_name: portfolio_logstash
-#    volumes:
-#      - './logstash/forwarded-from-syslog-to-tcp.conf:/usr/share/logstash/pipeline/logstash.conf:ro'
-#      - './logs:/usr/share/logstash/logs'
-#      - './logstash/logstash.yml:/usr/share/logstash/config/logstash.yml'
-#      - './logstash/dlq:/usr/share/logstash/dlq'
-#      - 'certs:/usr/share/elasticsearch/config/certs'
-#    networks:
-#      - elasticsearch
-#    depends_on:
-#      - es01
-#    environment:
-#      - LOGSTASH_PASSWORD=${LOGSTASH_PASSWORD}
-#      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-#      - xpack.monitoring.enabled=false
-#    ports:
-#      - '10514:10514'
+  logstash:
+    image: logstash:8.6.1
+    container_name: portfolio_logstash
+    volumes:
+      - './logstash/csv.conf:/usr/share/logstash/pipeline/logstash.conf:ro'
+      - './logs:/usr/share/logstash/logs'
+      - './logstash/logstash.yml:/usr/share/logstash/config/logstash.yml'
+      - './logstash/dlq:/usr/share/logstash/dlq'
+      - 'certs:/usr/share/elasticsearch/config/certs'
+    networks:
+      - elasticsearch
+    depends_on:
+      - es01
+    environment:
+      - LOGSTASH_PASSWORD=${LOGSTASH_PASSWORD}
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - xpack.monitoring.enabled=false
+    ports:
+      - '10514:10514'
 volumes:
   certs:
     driver: local

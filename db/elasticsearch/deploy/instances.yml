@@ -11,9 +11,3 @@ instances:
       - localhost
     ip:
       - 127.0.0.1
-  - name: es03
-    dns:
-      - es03
-      - localhost
-    ip:
-      - 127.0.0.1
