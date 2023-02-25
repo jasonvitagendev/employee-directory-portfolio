@@ -1,0 +1,38 @@
+version: '3'
+networks:
+  node_app:
+    driver: bridge
+services:
+  node:
+    image: bitnami/node:18.14.2
+    container_name: node
+    volumes:
+      - ../:/app
+    ports:
+      - '3000:3000'
+    env_file:
+      - ./.env
+    command: >
+      bash -c '
+        yarn && node dist/server.js
+      '
+    networks:
+      - node_app
+    depends_on:
+      - nginx
+
+  nginx:
+    image: nginx:stable-perl
+    container_name: nginx
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - ./lego/certificates/${API_DOMAIN}.crt:/etc/nginx/${API_DOMAIN}.crt
+      - ./lego/certificates/${API_DOMAIN}.key:/etc/nginx/${API_DOMAIN}.key
+      - ./${API_DOMAIN}.access.log:/var/log/nginx/access.log
+      - ./${API_DOMAIN}.error.log:/var/log/nginx/error.log
+    ports:
+      - '443:8443'
+    networks:
+      - node_app
+
+
