@@ -88,7 +88,7 @@ services:
     healthcheck:
       test: [
         "CMD-SHELL",
-        "curl -s --cacert config/certs/ca/ca.crt https://localhost:9200 | grep -q 'missing authentication credentials'"
+        "curl -s --cacert config/certs/ca/ca.crt https://localhost:9200 | grep -vq 'missing authentication credentials'"
       ]
       interval: 10s
       timeout: 10s
@@ -130,7 +130,7 @@ services:
     healthcheck:
       test: [
         "CMD-SHELL",
-        "curl -s --cacert config/certs/ca/ca.crt https://localhost:9200 | grep -q 'missing authentication credentials'"
+        "curl -s --cacert config/certs/ca/ca.crt https://localhost:9200 | grep -vq 'missing authentication credentials'"
       ]
       interval: 10s
       timeout: 10s
@@ -163,25 +163,25 @@ services:
       interval: 10s
       timeout: 10s
       retries: 120
-#  logstash:
-#    image: logstash:8.6.1
-#    container_name: portfolio_logstash
-#    volumes:
-#      - './logstash/csv.conf:/usr/share/logstash/pipeline/logstash.conf:ro'
-#      - './logs:/usr/share/logstash/logs'
-#      - './logstash/logstash.yml:/usr/share/logstash/config/logstash.yml'
-#      - './logstash/dlq:/usr/share/logstash/dlq'
-#      - 'certs:/usr/share/elasticsearch/config/certs'
-#    networks:
-#      - outside
-#    depends_on:
-#      - es01
-#    environment:
-#      - LOGSTASH_PASSWORD=${LOGSTASH_PASSWORD}
-#      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-#      - xpack.monitoring.enabled=false
-#    ports:
-#      - '10514:10514'
+  logstash:
+    image: logstash:8.6.1
+    container_name: portfolio_logstash
+    volumes:
+      - './logstash/csv.conf:/usr/share/logstash/pipeline/logstash.conf:ro'
+      - './logs:/usr/share/logstash/logs'
+      - './logstash/logstash.yml:/usr/share/logstash/config/logstash.yml'
+      - './logstash/dlq:/usr/share/logstash/dlq'
+      - 'certs:/usr/share/elasticsearch/config/certs'
+    networks:
+      - outside
+    depends_on:
+      - es01
+    environment:
+      - LOGSTASH_PASSWORD=${LOGSTASH_PASSWORD}
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - xpack.monitoring.enabled=false
+    ports:
+      - '10514:10514'
 volumes:
   certs:
     driver: local

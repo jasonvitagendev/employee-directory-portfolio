@@ -1,7 +1,8 @@
 {
   "scripts": {
-    "start": "concurrently 'nodemon --watch webpack.config.js --exec webpack serve --env mode=development' 'npm run generate'",
-    "build": "webpack --env mode=production",
+    "start": "GRAPHQL_API=http://localhost:3000/graphql concurrently 'nodemon --watch webpack.config.js --exec webpack serve --env mode=development' 'npm run generate'",
+    "build": "GRAPHQL_API=https://api3.mobile360.net/graphql webpack --env mode=production",
+    "build-local": "GRAPHQL_API=https://api.jason.local/graphql webpack --env mode=production",
     "serve": "npm run build && npx http-server -c-1 ./dist",
     "generate": "graphql-codegen --config src/generated/codegen.ts --watch"
   },
