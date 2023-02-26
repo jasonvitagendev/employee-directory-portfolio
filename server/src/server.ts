@@ -8,6 +8,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import {expressMiddleware} from "@apollo/server/express4";
 import {CustomContext} from "./types/context";
+import {ApolloServerPluginDrainHttpServer} from "@apollo/server/plugin/drainHttpServer";
 
 async function start() {
     const app = express();
@@ -24,6 +25,7 @@ async function start() {
     const apolloServer = new ApolloServer<CustomContext>({
         typeDefs,
         resolvers,
+        plugins: [ApolloServerPluginDrainHttpServer({httpServer})],
     });
 
     await apolloServer.start();
@@ -49,4 +51,8 @@ async function start() {
     );
 }
 
-start();
+try {
+    start();
+} catch (err) {
+    console.error(err);
+}
