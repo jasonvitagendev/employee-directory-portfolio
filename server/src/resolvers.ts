@@ -94,7 +94,7 @@ export const resolvers: Resolvers = {
                 }
             );
             const result = (await res.json()) as EmployeesByFullName;
-            console.log(result);
+
             return result.hits.hits.map((hit) => ({
                 full_name: hit._source.full_name,
                 id: hit._source.id,
