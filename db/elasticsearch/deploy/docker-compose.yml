@@ -3,8 +3,8 @@ version: '3.9'
 # elasticsearch image workdir is /usr/share/elasticsearch
 
 networks:
-  elasticsearch:
-    driver: bridge
+  outside:
+    external: true
 services:
   setup:
     image: elasticsearch:${STACK_VERSION}
@@ -14,7 +14,7 @@ services:
       - certs:/usr/share/elasticsearch/config/certs
       - './instances.yml:/usr/share/elasticsearch/instances.yml'
     networks:
-      - elasticsearch
+      - outside
     command: >
       bash -c '
         pwd;
@@ -60,7 +60,7 @@ services:
     ports:
       - ${ES_PORT}:9200
     networks:
-      - elasticsearch
+      - outside
     environment:
       - node.name=es01
       - cluster.name=${CLUSTER_NAME}
@@ -102,7 +102,7 @@ services:
       - certs:/usr/share/elasticsearch/config/certs
       - esdata02:/usr/share/elasticsearch/data
     networks:
-      - elasticsearch
+      - outside
     environment:
       - node.name=es02
       - cluster.name=${CLUSTER_NAME}
@@ -148,7 +148,7 @@ services:
     ports:
       - ${KIBANA_PORT}:5601
     networks:
-      - elasticsearch
+      - outside
     environment:
       - SERVERNAME=kibana
       - ELASTICSEARCH_HOSTS=https://es01:9200
@@ -163,25 +163,25 @@ services:
       interval: 10s
       timeout: 10s
       retries: 120
-  logstash:
-    image: logstash:8.6.1
-    container_name: portfolio_logstash
-    volumes:
-      - './logstash/csv.conf:/usr/share/logstash/pipeline/logstash.conf:ro'
-      - './logs:/usr/share/logstash/logs'
-      - './logstash/logstash.yml:/usr/share/logstash/config/logstash.yml'
-      - './logstash/dlq:/usr/share/logstash/dlq'
-      - 'certs:/usr/share/elasticsearch/config/certs'
-    networks:
-      - elasticsearch
-    depends_on:
-      - es01
-    environment:
-      - LOGSTASH_PASSWORD=${LOGSTASH_PASSWORD}
-      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-      - xpack.monitoring.enabled=false
-    ports:
-      - '10514:10514'
+#  logstash:
+#    image: logstash:8.6.1
+#    container_name: portfolio_logstash
+#    volumes:
+#      - './logstash/csv.conf:/usr/share/logstash/pipeline/logstash.conf:ro'
+#      - './logs:/usr/share/logstash/logs'
+#      - './logstash/logstash.yml:/usr/share/logstash/config/logstash.yml'
+#      - './logstash/dlq:/usr/share/logstash/dlq'
+#      - 'certs:/usr/share/elasticsearch/config/certs'
+#    networks:
+#      - outside
+#    depends_on:
+#      - es01
+#    environment:
+#      - LOGSTASH_PASSWORD=${LOGSTASH_PASSWORD}
+#      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+#      - xpack.monitoring.enabled=false
+#    ports:
+#      - '10514:10514'
 volumes:
   certs:
     driver: local

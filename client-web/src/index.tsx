@@ -6,7 +6,7 @@ const appElement = document.getElementById("app");
 
 if (appElement) {
     const client = new ApolloClient({
-        uri: "http://localhost:3000/graphql",
+        uri: `${process.env.GRAPHQL_API}`,
         cache: new InMemoryCache(),
     });
 

@@ -69,29 +69,32 @@ export const resolvers: Resolvers = {
             }));
         },
         async searchEmployeeByFullName(_, args) {
-            const res = await fetch("https://localhost:9200/employee/_search", {
-                agent,
-                method: "post",
-                headers: {
-                    Authorization: `Basic ${process.env.ELASTIC_BASIC_TOKEN}`,
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    query: {
-                        match_phrase: {
-                            full_name: args.full_name,
-                        },
+            const res = await fetch(
+                `https://${process.env.ELASTIC_SEARCH_SERVICE}:9200/employee/_search`,
+                {
+                    agent,
+                    method: "post",
+                    headers: {
+                        Authorization: `Basic ${process.env.ELASTIC_BASIC_TOKEN}`,
+                        "Content-Type": "application/json",
                     },
-                    highlight: {
-                        fields: {
-                            full_name: {},
+                    body: JSON.stringify({
+                        query: {
+                            match_phrase: {
+                                full_name: args.full_name,
+                            },
                         },
-                    },
-                    size: args.limit,
-                }),
-            });
-
+                        highlight: {
+                            fields: {
+                                full_name: {},
+                            },
+                        },
+                        size: args.limit,
+                    }),
+                }
+            );
             const result = (await res.json()) as EmployeesByFullName;
+            console.log(result);
             return result.hits.hits.map((hit) => ({
                 full_name: hit._source.full_name,
                 id: hit._source.id,

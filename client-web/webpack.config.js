@@ -2,6 +2,7 @@ const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("node:path");
+const webpack = require("webpack");
 
 module.exports = (env) => {
     return {
@@ -49,6 +50,7 @@ module.exports = (env) => {
             new HTMLWebpackPlugin({
                 template: "./src/templates/index.html",
             }),
+            new webpack.EnvironmentPlugin(["GRAPHQL_API"]),
         ],
         devtool: env.mode === "development" ? "eval-source-map" : false,
     };
