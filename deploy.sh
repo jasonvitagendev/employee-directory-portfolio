@@ -10,6 +10,8 @@ cd $HOME/client-web/deploy
 docker compose down
 docker compose up -d
 
+docker cp portfolio_es_node_01:/usr/share/elasticsearch/config/certs/ca/ca.crt ~/server/certs/
+
 cd $HOME/server/deploy
 docker compose down
 docker compose up -d
