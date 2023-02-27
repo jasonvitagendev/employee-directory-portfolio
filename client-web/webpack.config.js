@@ -46,7 +46,12 @@ module.exports = (env) => {
             plugins: [new TsconfigPathsPlugin()],
         },
         plugins: [
-            new MiniCssExtractPlugin(),
+            new MiniCssExtractPlugin({
+                filename:
+                    env.mode === "development"
+                        ? "[name].css"
+                        : "[name].[contenthash].css",
+            }),
             new HTMLWebpackPlugin({
                 template: "./src/templates/index.html",
             }),
