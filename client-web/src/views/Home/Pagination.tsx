@@ -1,3 +1,5 @@
+import cx from "classnames";
+
 interface Props {
     prevPage: () => void;
     nextPage: () => void;
@@ -14,15 +16,33 @@ const Pagination = ({
     atPage,
 }: Props) => {
     return (
-        <div>
-            <button onClick={prevPage} disabled={prevPageDisabled}>
-                prev
-            </button>
-            <p>Page: {atPage + 1}</p>
-            <button onClick={nextPage} disabled={nextPageDisabled}>
-                next
-            </button>
-        </div>
+        <nav
+            aria-label="Employee directory pagination"
+            className="d-flex flex-column align-items-center"
+        >
+            <div className="mt-4">Page {atPage + 1}</div>
+            <ul className="pagination justify-content-center">
+                <li
+                    className={cx("page-item", {
+                        disabled: prevPageDisabled,
+                    })}
+                >
+                    <a className="page-link" href="#" onClick={prevPage}>
+                        Previous
+                    </a>
+                </li>
+
+                <li
+                    className={cx("page-item", {
+                        disabled: nextPageDisabled,
+                    })}
+                >
+                    <a className="page-link" href="#" onClick={nextPage}>
+                        Next
+                    </a>
+                </li>
+            </ul>
+        </nav>
     );
 };
 

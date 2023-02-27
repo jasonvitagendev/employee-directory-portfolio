@@ -12,19 +12,30 @@ const List = ({list, loading, error}: Props) => {
     if (error) return <p>Error: {error.message}</p>;
 
     return (
-        <div>
-            <ul>
-                {list.map((item) => {
-                    return (
-                        // there is an apollo client bug, there are discrepancies between API data and useQuery data when cache is used
-                        // switching fetchPolicy to 'no-cache' will overcome this issue, however API will be called twice, https://github.com/apollographql/apollo-client/issues/10540
-                        <li key={item.id || "" + item.department.id}>
-                            {item.id} {item.first_name} {item.last_name}{" "}
-                            {item.department.dept_name}
-                        </li>
-                    );
-                })}
-            </ul>
+        <div className="col">
+            <h3>Listing</h3>
+            <table className="table table-sm table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Department</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {list.map((item) => {
+                        return (
+                            <tr key={item.id || "" + item.department.id}>
+                                <td>{item.id}</td>
+                                <td>
+                                    {item.first_name} {item.last_name}
+                                </td>
+                                <td>{item.department.dept_name}</td>
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </table>
         </div>
     );
 };

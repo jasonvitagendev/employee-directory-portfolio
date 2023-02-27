@@ -17,19 +17,33 @@ export const useEmployeesSearch = () => {
     );
 
     const [searchKeyword, setSearchKeyword] = useState("");
+    const [selectedID, setSelectedID] = useState("");
 
     const searchEmployees = useCallback(
         async (searchTerm: string, limit?: number) => {
             setSearchKeyword(searchTerm);
-            await search({
-                variables: {
-                    fullName: searchTerm,
-                    limit: limit || 5,
-                },
-            });
+            if (searchTerm !== "") {
+                await search({
+                    variables: {
+                        fullName: searchTerm,
+                        limit: limit || 5,
+                    },
+                });
+            }
         },
         []
     );
 
-    return [searchEmployees, {loading, error, data, searchKeyword}] as const;
+    return [
+        searchEmployees,
+        {
+            loading,
+            error,
+            data,
+            searchKeyword,
+            setSearchKeyword,
+            selectedID,
+            setSelectedID,
+        },
+    ] as const;
 };

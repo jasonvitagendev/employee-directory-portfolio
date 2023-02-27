@@ -1,41 +1,45 @@
 import {useCallback, useState} from "react";
-import {useQuery} from "@apollo/client";
+import {useLazyQuery} from "@apollo/client";
 import {gql} from "../../../generated";
 
 interface Options {
     limit: number;
     startPageNo: number;
+    id?: string;
 }
 
 const GET_EMPLOYEES = gql(`#graphql
-    query GetEmployees($limit: Int, $offset: Int) {
-        allEmployees(limit: $limit, offset: $offset) {
+query GetEmployees($limit: Int, $offset: Int, $id: String) {
+    allEmployees(limit: $limit, offset: $offset, id: $id) {
+        id
+        first_name
+        last_name
+        birth_date
+        department {
             id
-            first_name
-            last_name
-            birth_date
-            department {
-                id
-                dept_name
-            }
+            dept_name
         }
-    }`);
+    }
+}`);
 
-export const useEmployeesQuery = ({limit, startPageNo}: Options) => {
+export const useEmployeesQuery = ({limit, startPageNo, id}: Options) => {
     const [page, setPage] = useState(startPageNo);
-    const {loading, error, data, fetchMore} = useQuery(GET_EMPLOYEES, {
+    const [getEmployees, {loading, error, data}] = useLazyQuery(GET_EMPLOYEES, {
         fetchPolicy: "no-cache",
         variables: {
             limit,
             offset: page * limit,
+            id,
         },
     });
 
     const prevPage = useCallback(async () => {
         const newPage = page - 1;
-        await fetchMore({
+        await getEmployees({
             variables: {
+                limit,
                 offset: newPage * limit,
+                id: undefined,
             },
         });
         setPage(newPage);
@@ -43,21 +47,25 @@ export const useEmployeesQuery = ({limit, startPageNo}: Options) => {
 
     const nextPage = useCallback(async () => {
         const newPage = page + 1;
-        await fetchMore({
+        await getEmployees({
             variables: {
+                limit,
                 offset: newPage * limit,
+                id: undefined,
             },
         });
         setPage(newPage);
     }, [page]);
 
-    return {
-        loading,
-        error,
-        data,
-        fetchMore,
-        page,
-        prevPage,
-        nextPage,
-    };
+    return [
+        getEmployees,
+        {
+            loading,
+            error,
+            data,
+            page,
+            prevPage,
+            nextPage,
+        },
+    ] as const;
 };

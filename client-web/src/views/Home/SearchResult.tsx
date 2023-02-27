@@ -3,26 +3,51 @@ import {SearchEmployeeByFullNameQuery} from "../../generated/graphql";
 interface Props {
     list: SearchEmployeeByFullNameQuery["searchEmployeeByFullName"];
     isNoResult: boolean;
+    onSearchResultClick: (id: string) => void;
 }
 
-const SearchResult = ({list, isNoResult}: Props) => {
+const SearchResult = ({list, isNoResult, onSearchResultClick}: Props) => {
     return (
-        <div>
+        <div className="mb-4">
             {isNoResult && <div>No search results</div>}
-            <ul>
-                {list.map((item) => {
-                    return (
-                        <li key={item.id}>
-                            <span>{item.id}</span>{" "}
-                            {item.highlight.map((html) => (
-                                <span
-                                    dangerouslySetInnerHTML={{__html: html}}
-                                ></span>
-                            ))}
-                        </li>
-                    );
-                })}
-            </ul>
+            {!!list.length && (
+                <div className="mb-5">
+                    <h3>Search results</h3>
+                    <table className="table table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {list.map((item, index) => {
+                                return (
+                                    <tr
+                                        key={item.id + index}
+                                        onClick={() => {
+                                            onSearchResultClick(item.id);
+                                        }}
+                                    >
+                                        <td>
+                                            <span>{item.id}</span>
+                                        </td>
+                                        <td>
+                                            {item.highlight.map((html) => (
+                                                <span
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: html,
+                                                    }}
+                                                ></span>
+                                            ))}
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
+                </div>
+            )}
         </div>
     );
 };
