@@ -13,7 +13,10 @@ const SEARCH_EMPLOYEES_BY_NAME = gql(`#graphql
 
 export const useEmployeesSearch = () => {
     const [search, {loading, error, data}] = useLazyQuery(
-        SEARCH_EMPLOYEES_BY_NAME
+        SEARCH_EMPLOYEES_BY_NAME,
+        {
+            fetchPolicy: "no-cache",
+        }
     );
 
     const [searchKeyword, setSearchKeyword] = useState("");

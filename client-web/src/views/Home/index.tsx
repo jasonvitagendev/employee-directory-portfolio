@@ -1,11 +1,10 @@
 import List from "./List";
-import styles from "./style.module.sass";
+import "./style.module.sass";
 import SearchBox from "./SearchBox";
 import {useEmployeesQuery} from "./hooks/useEmployeesQuery";
 import Pagination from "./Pagination";
 import {useEmployeesSearch} from "./hooks/useEmployeesSearch";
 import SearchResult from "./SearchResult";
-import cx from "classnames";
 import {useCallback, useEffect} from "react";
 
 const limit = 15;
@@ -66,7 +65,7 @@ const Home = () => {
             <header>
                 <h2>Employee directory</h2>
             </header>
-            <section className="col-12 col-sm-12 col-md-6">
+            <section className="col-12 col-lg-6">
                 <SearchBox search={search} searchKeyword={searchKeyword} />
                 {searchKeyword && (
                     <SearchResult
@@ -98,8 +97,7 @@ const Home = () => {
                 )}
                 <footer></footer>
             </section>
-            <hr className={cx("mt-5", styles.bg)} />
-            <footer>A portfolio by Jason Cheng</footer>
+            <footer className="mt-4">A portfolio by Jason Cheng</footer>
         </div>
     );
 };
