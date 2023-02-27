@@ -46,6 +46,7 @@ export type Query = {
 
 
 export type QueryAllEmployeesArgs = {
+  id?: InputMaybe<Scalars['String']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
 };

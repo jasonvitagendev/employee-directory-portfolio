@@ -29,9 +29,10 @@ export const resolvers: Resolvers = {
                                        on department_employee.employee_id = employee.id
                              left join employees.department department
                                        on department.id = department_employee.department_id
-                    limit $1 offset $2;
+                    where $1::int is null or employee.id = $1
+                    limit $2 offset $3;
                 `,
-                [args.limit || 10, args.offset]
+                [args.id, args.limit || 10, args.offset || 0]
             );
             return res.rows.map((row) => ({
                 ...row,

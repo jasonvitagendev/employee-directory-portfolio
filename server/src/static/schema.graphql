@@ -19,7 +19,7 @@ type EmployeeSearchResult {
 }
 
 type Query {
-    allEmployees(limit: Int, offset: Int): [Employee!]!
+    allEmployees(limit: Int, offset: Int, id: String): [Employee!]!
     employeesByDepartment(department: String!, limit: Int, offset: Int): [Employee!]!
     searchEmployeeByFullName(full_name: String, limit: Int):[EmployeeSearchResult!]!
 }
