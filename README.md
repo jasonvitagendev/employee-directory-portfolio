@@ -17,7 +17,7 @@ https://portfolio.mobile360.net/employee-profile.html
 
 ### Services
 
-- client-web - a static website using Typescript, served via nginx
+- client-web - a static website using Typescript and GraphQL, served via nginx
 - db
   - postgresql - a sql database, to store employee table
   - elasticsearch - a search engine, for full text queries of employee full name
