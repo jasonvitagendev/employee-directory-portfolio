@@ -151,7 +151,6 @@ const CallModal = ({setShowModal}: Props) => {
                                 width="80%"
                                 autoPlay
                                 playsInline
-                                muted
                             ></video>
                             <video
                                 id="local-vid"
@@ -159,7 +158,6 @@ const CallModal = ({setShowModal}: Props) => {
                                 width="40%"
                                 autoPlay
                                 playsInline
-                                muted
                                 className="mt-3"
                             ></video>
                             <audio id="remote-audio" ref={remoteAudio}></audio>

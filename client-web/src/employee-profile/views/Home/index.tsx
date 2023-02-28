@@ -126,7 +126,6 @@ const Home = () => {
                     ref={remoteVid}
                     width="80%"
                     autoPlay
-                    muted
                     playsInline
                 ></video>
                 <video
@@ -135,7 +134,6 @@ const Home = () => {
                     width="40%"
                     autoPlay
                     playsInline
-                    muted
                     className="mt-3"
                 ></video>
                 <audio id="remote-audio" ref={remoteAudio}></audio>
