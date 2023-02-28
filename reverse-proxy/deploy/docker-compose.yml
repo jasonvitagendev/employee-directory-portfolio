@@ -3,23 +3,23 @@ networks:
   outside:
     external: true
 services:
-#  lego:
-#    image: goacme/lego:v4.10.0
-#    container_name: lego
-#    volumes:
-#      - certs:/.lego/certificates
-#    ports:
-#      - '80:80'
-#      - '443:443'
-#    env_file:
-#      - ./.env
-#    command:
-#      '--accept-tos --dns route53 --domains="${API_DOMAIN}" --domains="${STATIC_DOMAIN}" --domains="${SIP_DOMAIN}" --email="${EMAIL}" run'
-#    healthcheck:
-#      test: ['CMD-SHELL', '[ -f /.lego/certificates/${API_DOMAIN}.crt ]']
-#      interval: 10s
-#      timeout: 10s
-#      retries: 120
+  lego:
+    image: goacme/lego:v4.10.0
+    container_name: lego
+    volumes:
+      - certs:/.lego/certificates
+    ports:
+      - '80:80'
+      - '443:443'
+    env_file:
+      - ./.env
+    command:
+      '--accept-tos --dns route53 --domains="${API_DOMAIN}" --domains="${STATIC_DOMAIN}" --domains="${SIP_DOMAIN}" --email="${EMAIL}" run'
+    healthcheck:
+      test: ['CMD-SHELL', '[ -f /.lego/certificates/${API_DOMAIN}.crt ]']
+      interval: 10s
+      timeout: 10s
+      retries: 120
   reverse_nginx:
     image: nginx:stable-perl
     container_name: reverse_nginx
@@ -32,9 +32,9 @@ services:
       - '80:8080'
     networks:
       - outside
-#    depends_on:
-#      lego:
-#        condition: service_healthy
+    depends_on:
+      lego:
+        condition: service_healthy
 volumes:
   certs:
     driver: local
