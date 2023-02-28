@@ -27,7 +27,11 @@ const Pagination = ({
                         disabled: prevPageDisabled,
                     })}
                 >
-                    <a className="page-link" href="#" onClick={prevPage}>
+                    <a
+                        className="page-link"
+                        href="client-web/src/employee-directory/views/Home#"
+                        onClick={prevPage}
+                    >
                         Previous
                     </a>
                 </li>
@@ -37,7 +41,11 @@ const Pagination = ({
                         disabled: nextPageDisabled,
                     })}
                 >
-                    <a className="page-link" href="#" onClick={nextPage}>
+                    <a
+                        className="page-link"
+                        href="client-web/src/employee-directory/views/Home#"
+                        onClick={nextPage}
+                    >
                         Next
                     </a>
                 </li>

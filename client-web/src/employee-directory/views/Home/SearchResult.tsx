@@ -8,7 +8,7 @@ interface Props {
 
 const SearchResult = ({list, isNoResult, onSearchResultClick}: Props) => {
     return (
-        <div className="mb-4">
+        <div className="mb-4" style={{height: "220px"}}>
             {isNoResult && <div>No search results</div>}
             {!!list.length && (
                 <div className="mb-5">

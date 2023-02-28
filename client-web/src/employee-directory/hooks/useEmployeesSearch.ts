@@ -1,4 +1,4 @@
-import {gql} from "../../../generated";
+import {gql} from "../generated";
 import {useLazyQuery} from "@apollo/client";
 import {useCallback, useState} from "react";
 

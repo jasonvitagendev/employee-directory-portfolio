@@ -4,7 +4,7 @@ const config: CodegenConfig = {
     schema: `${process.env.GRAPHQL_API}`,
     documents: ["src/**/*.{ts,tsx}"],
     generates: {
-        "src/generated/": {
+        "src/employee-directory/generated/": {
             preset: "client",
             plugins: [],
             presetConfig: {

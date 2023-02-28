@@ -8,7 +8,8 @@ module.exports = (env) => {
     return {
         mode: env.mode,
         entry: {
-            main: "./src/index.tsx",
+            employee_directory: "./src/employee-directory/index.tsx",
+            employee_profile: "./src/employee-profile/index.tsx",
         },
         output: {
             clean: true,
@@ -39,6 +40,10 @@ module.exports = (env) => {
                         "sass-loader",
                     ],
                 },
+                {
+                    test: /.mp3$/,
+                    type: "asset/resource",
+                },
             ],
         },
         resolve: {
@@ -53,9 +58,16 @@ module.exports = (env) => {
                         : "[name].[contenthash].css",
             }),
             new HTMLWebpackPlugin({
-                template: "./src/templates/index.html",
+                template: "./src/employee-directory/templates/index.html",
+                chunks: ["employee_directory"],
+                filename: "index.html",
             }),
-            new webpack.EnvironmentPlugin(["GRAPHQL_API"]),
+            new HTMLWebpackPlugin({
+                template: "./src/employee-profile/templates/index.html",
+                chunks: ["employee_profile"],
+                filename: "employee-profile.html",
+            }),
+            new webpack.EnvironmentPlugin(["GRAPHQL_API", "SIP_SWITCH_HOST"]),
         ],
         devtool: env.mode === "development" ? "eval-source-map" : false,
     };

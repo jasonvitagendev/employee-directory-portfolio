@@ -1,10 +1,10 @@
 {
   "scripts": {
-    "start": "GRAPHQL_API=http://localhost:3000/graphql concurrently 'nodemon --watch webpack.config.js --exec webpack serve --env mode=development' 'npm run generate'",
-    "build": "GRAPHQL_API=https://api3.mobile360.net/graphql webpack --env mode=production",
-    "build-local": "GRAPHQL_API=https://api.jason.local/graphql webpack --env mode=production",
+    "start": "GRAPHQL_API=http://localhost:3000/graphql SIP_SWITCH_HOST=switch.jason.local concurrently 'nodemon --watch webpack.config.js --exec webpack serve --env mode=development' 'npm run generate'",
+    "build": "GRAPHQL_API=https://api3.mobile360.net/graphql SIP_SWITCH_HOST=switch.mobile360.net webpack --env mode=production",
+    "build-local": "GRAPHQL_API=https://api.jason.local/graphql SIP_SWITCH_HOST=switch.jason.local webpack --env mode=production",
     "serve": "npm run build && npx http-server -c-1 ./dist",
-    "generate": "graphql-codegen --config src/generated/codegen.ts --watch"
+    "generate": "graphql-codegen --config src/employee-directory/generated/codegen.ts --watch"
   },
   "browserslist": [
     "last 2 versions"
@@ -43,6 +43,7 @@
     "classnames": "^2.3.2",
     "graphql": "^16.6.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "sip.js": "^0.21.2"
   }
 }

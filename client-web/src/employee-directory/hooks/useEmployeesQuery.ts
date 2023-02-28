@@ -1,6 +1,6 @@
 import {useCallback, useState} from "react";
 import {useLazyQuery} from "@apollo/client";
-import {gql} from "../../../generated";
+import {gql} from "../generated";
 
 interface Options {
     limit: number;

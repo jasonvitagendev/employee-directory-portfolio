@@ -5,9 +5,10 @@ interface Props {
     list: GetEmployeesQuery["allEmployees"];
     loading?: boolean;
     error?: ApolloError | undefined;
+    setShowModal: (show: boolean) => void;
 }
 
-const List = ({list, loading, error}: Props) => {
+const List = ({list, loading, error, setShowModal}: Props) => {
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error.message}</p>;
 
@@ -31,6 +32,20 @@ const List = ({list, loading, error}: Props) => {
                                     {item.first_name} {item.last_name}
                                 </td>
                                 <td>{item.department.dept_name}</td>
+                                <td>
+                                    <div
+                                        className="btn-group btn-group-sm"
+                                        role="group"
+                                        aria-label="Call buttons"
+                                    >
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowModal(true)}
+                                        >
+                                            Call
+                                        </button>
+                                    </div>
+                                </td>
                             </tr>
                         );
                     })}

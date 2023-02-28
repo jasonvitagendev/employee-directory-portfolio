@@ -1,11 +1,12 @@
 import List from "./List";
 import "./style.module.sass";
 import SearchBox from "./SearchBox";
-import {useEmployeesQuery} from "./hooks/useEmployeesQuery";
+import {useEmployeesQuery} from "../../hooks/useEmployeesQuery";
 import Pagination from "./Pagination";
-import {useEmployeesSearch} from "./hooks/useEmployeesSearch";
+import {useEmployeesSearch} from "../../hooks/useEmployeesSearch";
 import SearchResult from "./SearchResult";
-import {useCallback, useEffect} from "react";
+import {useCallback, useEffect, useState} from "react";
+import CallModal from "./CallModal";
 
 const limit = 15;
 
@@ -60,6 +61,9 @@ const Home = () => {
         setSelectedID(id);
     }, []);
 
+    // modal state
+    const [showModal, setShowModal] = useState(false);
+
     return (
         <div className="d-flex flex-column align-items-center">
             <header>
@@ -83,6 +87,7 @@ const Home = () => {
                         list={data?.allEmployees || []}
                         error={error}
                         loading={loading}
+                        setShowModal={setShowModal}
                     ></List>
                 )}
                 {!searchKeyword && (
@@ -95,7 +100,7 @@ const Home = () => {
                         ></Pagination>
                     </>
                 )}
-                <footer></footer>
+                {showModal && <CallModal setShowModal={setShowModal} />}
             </section>
             <footer className="mt-4">A portfolio by Jason Cheng</footer>
         </div>

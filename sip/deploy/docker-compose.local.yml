@@ -1,0 +1,18 @@
+version: '3'
+networks:
+  outside:
+    external: true
+services:
+  freeswitch:
+    image: bettervoice/freeswitch-container:1.6.16
+    container_name: better_voice_freeswitch
+    volumes:
+      - './conf/sip_profiles/internal.xml:/usr/local/freeswitch/conf/sip_profiles/internal.xml:ro'
+    ports:
+      - '5066:5066'
+      - '7443:7443'
+    networks:
+      - outside
+
+
+

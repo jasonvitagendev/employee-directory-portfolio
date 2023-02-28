@@ -12,6 +12,8 @@ services:
       - ../certs/tls.key:/etc/nginx/${API_DOMAIN_LOCAL}.key
       - ../certs/tls.crt:/etc/nginx/${STATIC_DOMAIN_LOCAL}.crt
       - ../certs/tls.key:/etc/nginx/${STATIC_DOMAIN_LOCAL}.key
+      - ../certs/tls.crt:/etc/nginx/${SIP_DOMAIN_LOCAL}.crt
+      - ../certs/tls.key:/etc/nginx/${SIP_DOMAIN_LOCAL}.key
       - logs:/var/log/nginx/logs
     ports:
       - '443:8443'
