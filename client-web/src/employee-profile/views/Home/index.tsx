@@ -87,7 +87,7 @@ const Home = () => {
                 try {
                     await audio.play();
                 } catch (err) {
-                    alert(err);
+                    console.error(err);
                 }
             }
         } catch (err) {
@@ -126,12 +126,16 @@ const Home = () => {
                     ref={remoteVid}
                     width="80%"
                     autoPlay
+                    muted
+                    playsInline
                 ></video>
                 <video
                     id="local-vid"
                     ref={localVid}
                     width="40%"
                     autoPlay
+                    playsInline
+                    muted
                     className="mt-3"
                 ></video>
                 <audio id="remote-audio" ref={remoteAudio}></audio>
