@@ -91,14 +91,12 @@ const Home = () => {
                     ></List>
                 )}
                 {!searchKeyword && (
-                    <>
-                        <Pagination
-                            prevPage={prevPage}
-                            nextPage={nextPage}
-                            atPage={page}
-                            prevPageDisabled={page === 0}
-                        ></Pagination>
-                    </>
+                    <Pagination
+                        prevPage={prevPage}
+                        nextPage={nextPage}
+                        atPage={page}
+                        prevPageDisabled={page === 0}
+                    ></Pagination>
                 )}
                 {showModal && <CallModal setShowModal={setShowModal} />}
             </section>
