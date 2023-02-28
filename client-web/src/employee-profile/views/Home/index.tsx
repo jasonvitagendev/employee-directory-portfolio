@@ -1,5 +1,4 @@
-import {useCallback, useEffect, useRef} from "react";
-import "./style.module.sass";
+import {useCallback, useEffect, useRef, useState} from "react";
 import {getSIPSimpleUser} from "helpers/getSIPSimpleUser";
 import {SimpleUser} from "sip.js/lib/platform/web";
 import phoneCallSound from "static/sounds/phone-call.mp3";
@@ -14,6 +13,9 @@ const Home = () => {
     const simpleUserRef = useRef<SimpleUser>();
     let simpleUser = simpleUserRef.current!;
 
+    const [hasIncomingCall, setHasIncomingCall] = useState(false);
+    const [hasOutgoingCall, setHasOutgoingCall] = useState(false);
+
     useEffect(() => {
         (async () => {
             const audio = localAudio.current;
@@ -26,28 +28,36 @@ const Home = () => {
                 sipServer: process.env.SIP_SWITCH_HOST!,
                 delegate: {
                     async onCallReceived() {
+                        setHasIncomingCall(true);
+                        setHasOutgoingCall(false);
                         if (audio) {
                             audio.pause();
                             audio.src = phoneReceivedSound;
                             try {
                                 await audio.play();
                             } catch (err) {
-                                alert(err);
+                                console.error(err);
                             }
                         }
                     },
                     async onCallAnswered() {
+                        setHasIncomingCall(false);
+                        setHasOutgoingCall(false);
                         if (audio) {
                             await audio.pause();
                         }
                     },
                     async onCallHangup() {
+                        setHasIncomingCall(false);
+                        setHasOutgoingCall(false);
                         if (audio) {
                             await audio.pause();
                         }
                     },
                     onServerDisconnect() {
-                        alert("disconnected");
+                        setHasIncomingCall(false);
+                        setHasOutgoingCall(false);
+                        console.log("disconnected");
                     },
                 },
             });
@@ -71,6 +81,7 @@ const Home = () => {
         const audio = localAudio.current;
         try {
             await simpleUser.call(`sip:1001@${process.env.SIP_SWITCH_HOST}`); // hardcoded
+            setHasOutgoingCall(true);
             if (audio) {
                 audio.src = phoneCallSound;
                 try {
@@ -80,6 +91,7 @@ const Home = () => {
                 }
             }
         } catch (err) {
+            setHasOutgoingCall(false);
             if (audio) {
                 audio.pause();
             }
@@ -124,6 +136,20 @@ const Home = () => {
                 ></video>
                 <audio id="remote-audio" ref={remoteAudio}></audio>
                 <audio id="local-audio" ref={localAudio} loop></audio>
+            </section>
+            <section>
+                {hasOutgoingCall && (
+                    <div className="d-flex align-items-center mt-4">
+                        <div className="pulse pulse_blue"></div>
+                        <div>Calling</div>
+                    </div>
+                )}
+                {hasIncomingCall && (
+                    <div className="d-flex align-items-center mt-4">
+                        <div className="pulse pulse_green"></div>
+                        <div>Incoming call</div>
+                    </div>
+                )}
             </section>
             <section className="mt-4">
                 <div

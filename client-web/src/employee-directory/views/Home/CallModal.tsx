@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useRef} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import {getSIPSimpleUser} from "helpers/getSIPSimpleUser";
 import {SimpleUser} from "sip.js/lib/platform/web";
 import phoneCallSound from "static/sounds/phone-call.mp3";
@@ -17,6 +17,9 @@ const CallModal = ({setShowModal}: Props) => {
     const simpleUserRef = useRef<SimpleUser>();
     let simpleUser = simpleUserRef.current!;
 
+    const [hasIncomingCall, setHasIncomingCall] = useState(false);
+    const [hasOutgoingCall, setHasOutgoingCall] = useState(false);
+
     useEffect(() => {
         (async () => {
             const audio = localAudio.current;
@@ -29,17 +32,21 @@ const CallModal = ({setShowModal}: Props) => {
                 sipServer: process.env.SIP_SWITCH_HOST!,
                 delegate: {
                     async onCallReceived() {
+                        setHasIncomingCall(true);
+                        setHasOutgoingCall(false);
                         if (audio) {
                             audio.pause();
                             audio.src = phoneReceivedSound;
                             try {
                                 await audio.play();
                             } catch (err) {
-                                alert(err);
+                                console.error(err);
                             }
                         }
                     },
                     async onCallAnswered() {
+                        setHasIncomingCall(false);
+                        setHasOutgoingCall(false);
                         if (audio) {
                             console.log(111, "answered");
 
@@ -47,13 +54,17 @@ const CallModal = ({setShowModal}: Props) => {
                         }
                     },
                     async onCallHangup() {
+                        setHasIncomingCall(false);
+                        setHasOutgoingCall(false);
                         if (audio) {
                             console.log(111, "hangup");
                             await audio.pause();
                         }
                     },
                     onServerDisconnect() {
-                        alert("disconnected");
+                        setHasIncomingCall(false);
+                        setHasOutgoingCall(false);
+                        console.log("disconnected");
                     },
                 },
             });
@@ -76,6 +87,7 @@ const CallModal = ({setShowModal}: Props) => {
         const audio = localAudio.current;
         try {
             await simpleUser.call(`sip:1000@${process.env.SIP_SWITCH_HOST}`); // hardcoded
+            setHasOutgoingCall(true);
             if (audio) {
                 audio.src = phoneCallSound;
                 try {
@@ -85,6 +97,7 @@ const CallModal = ({setShowModal}: Props) => {
                 }
             }
         } catch (err) {
+            setHasOutgoingCall(false);
             if (audio) {
                 audio.pause();
             }
@@ -137,12 +150,16 @@ const CallModal = ({setShowModal}: Props) => {
                                 ref={remoteVid}
                                 width="80%"
                                 autoPlay
+                                playsInline
+                                muted
                             ></video>
                             <video
                                 id="local-vid"
                                 ref={localVid}
                                 width="40%"
                                 autoPlay
+                                playsInline
+                                muted
                                 className="mt-3"
                             ></video>
                             <audio id="remote-audio" ref={remoteAudio}></audio>
@@ -153,6 +170,18 @@ const CallModal = ({setShowModal}: Props) => {
                             ></audio>
                         </section>
                     </div>
+                    {hasOutgoingCall && (
+                        <div className="d-flex align-items-center mt-4">
+                            <div className="pulse pulse_blue"></div>
+                            <div>Calling</div>
+                        </div>
+                    )}
+                    {hasIncomingCall && (
+                        <div className="d-flex align-items-center">
+                            <div className="pulse pulse_green"></div>
+                            <div>Incoming call</div>
+                        </div>
+                    )}
                     <div className="modal-footer">
                         <button
                             type="button"
