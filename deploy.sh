@@ -19,3 +19,7 @@ docker compose up -d
 cd $HOME/reverse-proxy/deploy
 docker compose down
 docker compose up -d
+
+cd $HOME/sip/deploy
+docker compose -f docker-compose.local.yml down
+docker compose -f docker-compose.local.yml up -d
