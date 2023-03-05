@@ -9,6 +9,7 @@ services:
   setup:
     image: elasticsearch:${STACK_VERSION}
     container_name: portfolio_es_setup
+    restart: unless-stopped
     user: '0'
     volumes:
       - certs:/usr/share/elasticsearch/config/certs
@@ -54,6 +55,7 @@ services:
         condition: service_healthy
     image: elasticsearch:${STACK_VERSION}
     container_name: portfolio_es_node_01
+    restart: unless-stopped
     volumes:
       - certs:/usr/share/elasticsearch/config/certs
       - esdata01:/usr/share/elasticsearch/data
@@ -98,6 +100,7 @@ services:
       - es01
     image: elasticsearch:${STACK_VERSION}
     container_name: portfolio_es_node_02
+    restart: unless-stopped
     volumes:
       - certs:/usr/share/elasticsearch/config/certs
       - esdata02:/usr/share/elasticsearch/data
@@ -142,6 +145,7 @@ services:
       es02:
         condition: service_healthy
     image: kibana:${STACK_VERSION}
+    restart: unless-stopped
     volumes:
       - certs:/usr/share/kibana/config/certs
       - kibanadata:/usr/share/kibana/data
@@ -166,6 +170,7 @@ services:
   logstash:
     image: logstash:8.6.1
     container_name: portfolio_logstash
+    restart: unless-stopped
     volumes:
       - './logstash/csv.conf:/usr/share/logstash/pipeline/logstash.conf:ro'
       - './logs:/usr/share/logstash/logs'

@@ -6,6 +6,7 @@ services:
   client_web_nginx:
     image: nginx:stable-perl
     container_name: client_web_nginx
+    restart: unless-stopped
     volumes:
       - ./nginx:/etc/nginx/conf.d
       - ../dist:/home/dist

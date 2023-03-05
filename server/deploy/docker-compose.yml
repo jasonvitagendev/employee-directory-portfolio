@@ -6,6 +6,7 @@ services:
   node:
     image: bitnami/node:18.14.2
     container_name: node
+    restart: unless-stopped
     volumes:
       - ../:/app
     ports:

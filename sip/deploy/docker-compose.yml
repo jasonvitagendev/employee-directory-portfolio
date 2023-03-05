@@ -6,6 +6,7 @@ services:
   freeswitch:
     image: bettervoice/freeswitch-container:1.6.16
     container_name: better_voice_freeswitch
+    restart: unless-stopped
     volumes:
       - './conf/sip_profiles/internal.xml:/usr/local/freeswitch/conf/sip_profiles/internal.xml:ro'
     ports:
