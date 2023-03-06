@@ -1,6 +1,18 @@
 ### increase default operating system limits on mmap counts
 
+- one-time
+    
+    
     sudo sysctl -w vm.max_map_count=262144
+
+- permanent
+
+
+    sudo nano /etc/sysctl.conf
+    
+add this line
+
+    vm.max_map_count=262144
 
 
 ### curl put request with json body
