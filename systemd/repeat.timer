@@ -1,0 +1,13 @@
+[Unit]
+Description=Echo every 10s
+RefuseManualStart=no
+RefuseManualStop=no
+
+[Timer]
+Persistent=true
+OnCalendar=*-01,03,05,07,09,11-01 00:00:00
+Unit=repeat.service
+AccuracySec=1h
+
+[Install]
+WantedBy=timers.target

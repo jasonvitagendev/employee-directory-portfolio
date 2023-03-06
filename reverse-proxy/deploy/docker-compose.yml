@@ -7,7 +7,7 @@ services:
     image: goacme/lego:v4.10.0
     container_name: lego
     volumes:
-      - certs:/.lego/certificates
+      - lego:/.lego
     ports:
       - '80:80'
       - '443:443'
@@ -15,18 +15,13 @@ services:
       - ./.env
     command:
       '--accept-tos --dns route53 --domains="${API_DOMAIN}" --domains="${STATIC_DOMAIN}" --domains="${SIP_DOMAIN}" --email="${EMAIL}" run'
-    healthcheck:
-      test: ['CMD-SHELL', '[ -f /.lego/certificates/${API_DOMAIN}.crt ]']
-      interval: 10s
-      timeout: 10s
-      retries: 120
   reverse_nginx:
     image: nginx:stable-perl
     container_name: reverse_nginx
     restart: unless-stopped
     volumes:
       - ./nginx:/etc/nginx/conf.d
-      - certs:/etc/nginx/certs
+      - lego:/etc/nginx/certs
       - logs:/var/log/nginx/logs
     ports:
       - '443:8443'
@@ -35,9 +30,9 @@ services:
       - outside
     depends_on:
       lego:
-        condition: service_healthy
+        condition: service_completed_successfully
 volumes:
-  certs:
+  lego:
     driver: local
   logs:
     driver: local

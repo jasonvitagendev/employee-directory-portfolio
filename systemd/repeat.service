@@ -1,0 +1,9 @@
+[Unit]
+Description=renew let's encrypt
+
+[Service]
+Type=oneshot
+ExecStart=/home/ubuntu/systemd/repeat.sh
+
+[Install]
+WantedBy=default.target
