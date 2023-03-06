@@ -2,9 +2,9 @@
 
 ### Demo
 
-https://portfolio.mobile360.net
+https://demo.mobile360.net
 
-https://portfolio.mobile360.net/employee-profile.html
+https://demo.mobile360.net/employee-profile.html
 
 
 ### Use cases
