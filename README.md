@@ -11,8 +11,8 @@ https://portfolio.mobile360.net/employee-profile.html
 
 - View employee listing
 - Search employee by full name
-- Call employee (call at https://portfolio.mobile360.net)
-- Receive call (receive at https://portfolio.mobile360.net/employee-profile.html)
+- Call employee (call at https://demo.mobile360.net)
+- Receive call (receive at https://demo.mobile360.net/employee-profile.html)
 
 
 ### Services
