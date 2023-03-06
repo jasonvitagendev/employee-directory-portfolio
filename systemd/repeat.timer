@@ -1,5 +1,5 @@
 [Unit]
-Description=Echo every 10s
+Description=renew let's encrypt every 2 months
 RefuseManualStart=no
 RefuseManualStop=no
 
