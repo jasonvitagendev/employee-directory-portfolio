@@ -3,6 +3,7 @@ const HTMLWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("node:path");
 const webpack = require("webpack");
+const ESLintPlugin = require("eslint-webpack-plugin");
 
 module.exports = (env) => {
     return {
@@ -51,6 +52,10 @@ module.exports = (env) => {
             plugins: [new TsconfigPathsPlugin()],
         },
         plugins: [
+            new ESLintPlugin({
+                extensions: ["ts", "tsx"],
+                emitWarning: false,
+            }),
             new MiniCssExtractPlugin({
                 filename:
                     env.mode === "development"
