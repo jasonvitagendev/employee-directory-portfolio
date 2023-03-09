@@ -145,6 +145,7 @@ services:
       es02:
         condition: service_healthy
     image: kibana:${STACK_VERSION}
+    container_name: kibana
     restart: unless-stopped
     volumes:
       - certs:/usr/share/kibana/config/certs
