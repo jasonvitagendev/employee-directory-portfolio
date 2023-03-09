@@ -32,9 +32,13 @@ https://kibana.mobile360.net/app/dashboards#/view/55a9e6e0-a29e-11e7-928f-5dbe6f
 - client-web - a static website using Typescript and GraphQL, served via nginx
 - db
   - postgresql - a sql database, to store employee table
-  - elasticsearch - a search engine, for full text queries of employee full name
+  - elasticsearch 
+    - a search engine, for full text queries of employee full name
+    - an analytics engine for logs analytics
+  - kibana - a data visualization dashboard
 - server - a nodejs service using Typescript and GraphQL
 - sip - a FreeSWITCH server
+- reverse-proxy - an nginx server as the main entry point to APIs and static server, secured with SSL/TLS
 
 For portfolio purpose, these services reside in a single GIT repository
 
