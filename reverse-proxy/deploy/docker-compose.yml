@@ -22,7 +22,7 @@ services:
     volumes:
       - ./nginx:/etc/nginx/conf.d
       - lego:/etc/nginx/certs
-      - logs:/var/log/nginx/logs
+      - ./nginx_logs:/var/log/nginx/logs
     ports:
       - '443:8443'
       - '80:8080'
