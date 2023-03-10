@@ -9,6 +9,7 @@ import bodyParser from "body-parser";
 import {expressMiddleware} from "@apollo/server/express4";
 import {CustomContext} from "./types/context";
 import {ApolloServerPluginDrainHttpServer} from "@apollo/server/plugin/drainHttpServer";
+import {logger} from "./utils/logger";
 
 async function start() {
     const app = express();
@@ -51,8 +52,10 @@ async function start() {
     );
 }
 
-try {
-    start();
-} catch (err) {
-    console.error(err);
-}
+(async () => {
+    try {
+        await start();
+    } catch (err) {
+        logger.error(err);
+    }
+})();
