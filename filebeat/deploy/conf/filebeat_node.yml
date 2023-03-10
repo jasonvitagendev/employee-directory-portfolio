@@ -1,0 +1,28 @@
+processors:
+  - add_host_metadata:
+      when.not.contains.tags: forwarded
+  - add_cloud_metadata: ~
+  - add_docker_metadata: ~
+  - add_kubernetes_metadata: ~
+
+filebeat.inputs:
+
+  # Each - is an input. Most options can be set at the input level, so
+  # you can use different inputs for various configurations.
+  # Below are the input specific configurations.
+
+  # filestream is an input for collecting log messages from files.
+  - type: filestream
+
+    # Unique ID among all inputs, an ID is required.
+    id: node_logs
+
+    # Change to true to enable this input configuration.
+    enabled: true
+
+    # Paths that should be crawled and fetched. Glob based paths.
+    paths:
+      - /home/logs/express.log
+
+output.logstash:
+  hosts: ["logstash_node_server:5044"]

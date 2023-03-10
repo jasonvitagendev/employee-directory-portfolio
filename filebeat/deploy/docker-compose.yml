@@ -9,12 +9,20 @@ services:
     networks:
       - outside
     volumes:
-      - './filebeat_nginx.yml:/usr/share/filebeat/filebeat.yml:ro'
-      - './nginx.yml:/usr/share/filebeat/modules.d/nginx.yml:ro'
+      - './conf/filebeat_nginx.yml:/usr/share/filebeat/filebeat.yml:ro'
+      - './conf/nginx.yml:/usr/share/filebeat/modules.d/nginx.yml:ro'
       - './ca.crt:/home/ca.crt'
       - '/home/ubuntu/reverse-proxy/deploy/nginx-logs:/home/logs'
     env_file:
       - ./.env
     command:
       filebeat -e
+  filebeat_node_server:
+    image: docker.elastic.co/beats/filebeat:8.6.0
+    container_name: filebeat_node_server
+    networks:
+      - outside
+    volumes:
+      - './conf/filebeat_node.yml:/usr/share/filebeat/filebeat.yml:ro'
+      - '/home/ubuntu/server:/home/logs'
 
