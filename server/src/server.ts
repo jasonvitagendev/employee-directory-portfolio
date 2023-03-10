@@ -9,7 +9,7 @@ import bodyParser from "body-parser";
 import {expressMiddleware} from "@apollo/server/express4";
 import {CustomContext} from "./types/context";
 import {ApolloServerPluginDrainHttpServer} from "@apollo/server/plugin/drainHttpServer";
-import {logger} from "./utils/logger";
+import {expressLogger, logger} from "./utils/logger";
 
 async function start() {
     const app = express();
@@ -33,6 +33,7 @@ async function start() {
 
     app.use(
         "/graphql",
+        expressLogger,
         cors(),
         bodyParser.json(),
         expressMiddleware(apolloServer)
