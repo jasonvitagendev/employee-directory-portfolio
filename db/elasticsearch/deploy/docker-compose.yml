@@ -39,7 +39,7 @@ services:
         echo "Setting kibana_system password";
         until curl -s -X POST --cacert config/certs/ca/ca.crt -u "elastic:${ELASTIC_PASSWORD}" -H "Content-Type: application/json" https://es01:9200/_security/user/kibana_system/_password -d "{\"password\":\"${KIBANA_PASSWORD}\"}" | grep -q "^{}"; do sleep 10; done;
         echo "Creating logstash_writer role";
-        until curl -s --cacert config/certs/ca/ca.crt -u "elastic:${ELASTIC_PASSWORD}" -H "Content-Type: application/json" https://es01:9200/_security/role/logstash_writer -d "{ \"cluster\": [\"manage_index_templates\", \"monitor\", \"manage_ilm\"], \"indices\": [ { \"names\": [ \"logstash-*\", \"logs-*\", \"demo-*\", \"employee\" ], \"privileges\": [\"write\",\"create\",\"create_index\",\"manage\",\"manage_ilm\"] } ] }" | grep -q "^{\"role\":{\"created\""; do sleep 10; done;
+        until curl -s --cacert config/certs/ca/ca.crt -u "elastic:${ELASTIC_PASSWORD}" -H "Content-Type: application/json" https://es01:9200/_security/role/logstash_writer -d "{ \"cluster\": [\"manage_index_templates\", \"monitor\", \"manage_ilm\"], \"indices\": [ { \"names\": [ \"logstash-*\", \"logs-*\", \"demo-*\", \"employee\" ], \"privileges\": [\"write\",\"create\",\"create_index\",\"manage\",\"manage_ilm\", \"auto_configure\", \"all\"] } ] }" | grep -q "^{\"role\":{\"created\""; do sleep 10; done;
         echo "Creating logstash_internal user and assign logstash_writer role to it";
         until curl -s --cacert config/certs/ca/ca.crt -u "elastic:${ELASTIC_PASSWORD}" -H "Content-Type: application/json" https://es01:9200/_security/user/logstash_internal -d "{ \"password\" : \"${LOGSTASH_PASSWORD}\", \"roles\" : [ \"logstash_writer\"], \"full_name\" : \"Internal Logstash User\" }" | grep -q "^{\"created\""; do sleep 10; done;
         echo "All done!"
@@ -49,6 +49,8 @@ services:
       interval: 1s
       timeout: 5s
       retries: 120
+    environment:
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
   es01:
     depends_on:
       setup:
@@ -168,29 +170,9 @@ services:
       interval: 10s
       timeout: 10s
       retries: 120
-  logstash:
-    image: logstash:8.6.1
-    container_name: portfolio_logstash
-    restart: unless-stopped
-    volumes:
-      - './logstash/csv.conf:/usr/share/logstash/pipeline/logstash.conf:ro'
-      - './logs:/usr/share/logstash/logs'
-      - './logstash/logstash.yml:/usr/share/logstash/config/logstash.yml'
-      - './logstash/dlq:/usr/share/logstash/dlq'
-      - 'certs:/usr/share/elasticsearch/config/certs'
-    networks:
-      - outside
-    depends_on:
-      - es01
-    environment:
-      - LOGSTASH_PASSWORD=${LOGSTASH_PASSWORD}
-      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-      - xpack.monitoring.enabled=false
-    ports:
-      - '10514:10514'
 volumes:
   certs:
-    driver: local
+    external: true
   esdata01:
     driver: local
   esdata02:
