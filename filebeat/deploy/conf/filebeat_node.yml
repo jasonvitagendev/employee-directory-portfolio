@@ -23,6 +23,7 @@ filebeat.inputs:
     # Paths that should be crawled and fetched. Glob based paths.
     paths:
       - /home/logs/express.log
+      - /home/logs/combined.log
 
 output.logstash:
   hosts: ["logstash_node_server:5044"]
