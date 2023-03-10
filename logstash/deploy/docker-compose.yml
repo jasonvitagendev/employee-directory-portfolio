@@ -1,0 +1,27 @@
+version: '3'
+networks:
+  outside:
+    external: true
+volumes:
+  certs:
+    external: true
+services:
+  logstash_node_server:
+    image: logstash:${STACK_VERSION}
+    container_name: logstash_node_server
+    networks:
+      - outside
+    restart: unless-stopped
+    volumes:
+      - './conf/node_server.conf:/usr/share/logstash/pipeline/logstash.conf:ro'
+      - './conf/logstash.yml:/usr/share/logstash/config/logstash.yml'
+      - './conf/dlq:/usr/share/logstash/dlq'
+      - 'certs:/usr/share/elasticsearch/config/certs'
+    environment:
+      - LOGSTASH_USER=${LOGSTASH_USER}
+      - LOGSTASH_PASSWORD=${LOGSTASH_PASSWORD}
+      - xpack.monitoring.enabled=false
+    ports:
+      - '5044:5044'
+
+
